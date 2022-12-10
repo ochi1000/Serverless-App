@@ -27,7 +27,7 @@ export class ToDoAccess {
             }
         };
 
-        const result = await this.docClient.query(params).promise();
+        const result = await this.docClient.scan(params).promise();
         console.log(result);
         const items = result.Items;
 

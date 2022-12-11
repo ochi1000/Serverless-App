@@ -2,13 +2,15 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { Types } from 'aws-sdk/clients/s3';
 import { TodoItem } from "../models/TodoItem";
 import * as AWSSDK from "aws-sdk";
+import * as AWSXRaySDK from 'aws-xray-sdk';
 import { TodoUpdate } from "../models/TodoUpdate";
 
+const XAWS = AWSXRaySDK.captureAWS(AWSSDK)
 
 export class ToDoAPI {
     constructor(
-        private readonly docsClient: DocumentClient = new AWSSDK.DynamoDB.DocumentClient(),
-        private readonly s3BucketClient: Types = new AWSSDK.S3({ signatureVersion: 'v4' }),
+        private readonly docsClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
+        private readonly s3BucketClient: Types = new XAWS.S3({ signatureVersion: 'v4' }),
         private readonly todosTable = process.env.TODOS_TABLE,
         private readonly s3BucketName = process.env.S3_BUCKET_NAME) {
     }
